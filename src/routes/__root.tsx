@@ -77,18 +77,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ювелирный каталог" },
-      { name: "description", content: "Кольца, серьги, браслеты, подвески, цепи — авторские украшения ручной работы." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Ювелирный каталог" },
-      { name: "twitter:title", content: "Ювелирный каталог" },
-      { property: "og:description", content: "Кольца, серьги, браслеты, подвески, цепи — авторские украшения ручной работы." },
-      { name: "twitter:description", content: "Кольца, серьги, браслеты, подвески, цепи — авторские украшения ручной работы." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c9c50d31-c9bb-4936-9aab-f35d78cb2da9/id-preview-306248f0--b32f3de7-c8a9-4b77-92a7-ecbf2ed2afb4.lovable.app-1784679053949.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c9c50d31-c9bb-4936-9aab-f35d78cb2da9/id-preview-306248f0--b32f3de7-c8a9-4b77-92a7-ecbf2ed2afb4.lovable.app-1784679053949.png" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },

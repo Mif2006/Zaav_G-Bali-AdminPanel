@@ -5,16 +5,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ювелирные украшения ручной работы" },
-      {
-        name: "description",
-        content: "Авторские украшения — кольца, серьги, браслеты, подвески и цепи.",
-      },
-      { property: "og:title", content: "Ювелирные украшения ручной работы" },
-      {
-        property: "og:description",
-        content: "Авторские украшения — кольца, серьги, браслеты, подвески и цепи.",
-      },
+    
     ],
   }),
   component: LandingPage,
