@@ -283,7 +283,7 @@ export function formatPrice(value: number | string, lang: Lang) {
   const n = Number(value) || 0;
   return new Intl.NumberFormat(LOCALES[lang], {
     style: "currency",
-    currency: "USD",
+    currency: "IDR",
     maximumFractionDigits: n % 1 === 0 ? 0 : 2,
   }).format(n);
 }

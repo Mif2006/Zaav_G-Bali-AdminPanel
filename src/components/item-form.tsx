@@ -20,7 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { SingleImageUploader, MultiImageUploader } from "@/components/image-uploader";
 import { useI18n, catName } from "@/lib/i18n";
-import { X, Loader2, Trash2, Plus } from "lucide-react";
+import { ArrowLeft, X, Loader2, Trash2, Plus } from "lucide-react";
 
 type SizeRow = {
   size: string;
@@ -115,6 +115,11 @@ export function ItemForm({ itemId }: { itemId?: string }) {
   const isRing =
     primaryCat?.slug === "rings" || primaryCat?.slug === "phalange-rings";
   const defaultUnit: SizeRow["size_unit"] = isRing ? "ru" : "cm";
+
+  const formatPrice = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    return digits ? Number(digits).toLocaleString("de-DE") : "";
+  };
 
   const save = useMutation({
     mutationFn: async () => {
@@ -258,9 +263,20 @@ export function ItemForm({ itemId }: { itemId?: string }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate({ to: "/admin" })}
+            aria-label="Back to admin"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <h1 className="text-2xl font-semibold">
           {itemId ? t("admin.editItem") : t("admin.newItem")}
-        </h1>
+          </h1>
+        </div>
         <div className="flex gap-2">
           {itemId && (
             <Button
@@ -274,6 +290,13 @@ export function ItemForm({ itemId }: { itemId?: string }) {
               {t("admin.deleteItem")}
             </Button>
           )}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate({ to: "/admin/items/new" })}
+          >
+            {t("admin.newItem")}
+          </Button>
           <Button onClick={() => save.mutate()} disabled={save.isPending}>
             {save.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {save.isPending ? t("admin.saving") : t("admin.save")}
@@ -313,10 +336,13 @@ export function ItemForm({ itemId }: { itemId?: string }) {
                 <div className="space-y-2">
                   <Label>{t("field.price")} (IDR)</Label>
                   <Input
-                    type="number"
-                    step="0.01"
-                    value={f.price}
-                    onChange={(e) => setF({ ...f, price: e.target.value })}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatPrice(f.price)}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, "");
+                      setF({ ...f, price: raw });
+                    }}
                   />
                 </div>
                 <div className="space-y-2">
