@@ -4,6 +4,7 @@ import { listCategories, listItems, listItemTags, type Category, type Item } fro
 import { PublicShell } from "@/components/public-shell";
 import { useI18n, catName, formatPrice } from "@/lib/i18n";
 import { useMemo, useState } from "react";
+import { AdminFloatingToolbar } from "@/components/FloatingSearch";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/collections/")({
@@ -59,6 +60,7 @@ function CollectionsPage() {
 
   return (
     <div className="bg-white text-black">
+      <AdminFloatingToolbar />
       <PublicShell variant="light">
         <section className="pt-4 pb-10 text-center md:pt-10 md:pb-16">
           <h1 className="text-5xl font-bold tracking-tight md:text-7xl">

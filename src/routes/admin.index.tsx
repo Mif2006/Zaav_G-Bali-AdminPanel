@@ -21,6 +21,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { AdminFloatingToolbar } from "@/components/FloatingSearch";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/")({
@@ -127,6 +128,8 @@ function AdminItemsGrid() {
 
   return (
     <div className="space-y-6">
+     
+     <AdminFloatingToolbar />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">{t("admin.items")}</h1>
