@@ -40,7 +40,7 @@ type FormState = {
   detailImages: string[];
   recommendedIds: string[];
   sizes: SizeRow[];
-  stock: string; // used when the category has no size (earrings)
+  stock: string; // used when the category has no size (earrings and pendants)
 };
 
 const empty: FormState = {
@@ -79,7 +79,7 @@ export function ItemForm({ itemId }: { itemId?: string }) {
     if (!itemId || !existing.data) return;
     const { item, images, tagIds, recommendedIds, sizes } = existing.data;
     // Split existing size rows: those with a `size` value are size rows;
-    // one row with null size represents stock-only (for earrings).
+    // one row with null size represents stock-only (for earrings and pendants).
     const sized = sizes.filter((s) => s.size);
     const stockOnly = sizes.find((s) => !s.size);
     setF({
@@ -111,7 +111,7 @@ export function ItemForm({ itemId }: { itemId?: string }) {
   const tagCats = useMemo(() => (cats.data ?? []).filter((c) => c.kind === "tag"), [cats.data]);
 
   const primaryCat = primary.find((c) => c.id === f.primary_category_id);
-  const isEarring = primaryCat?.slug === "earrings";
+  const isStockOnly = ["earrings", "pendants"].includes(primaryCat?.slug ?? "");
   const isRing =
     primaryCat?.slug === "rings" || primaryCat?.slug === "phalange-rings";
   const defaultUnit: SizeRow["size_unit"] = isRing ? "ru" : "cm";
@@ -133,8 +133,8 @@ export function ItemForm({ itemId }: { itemId?: string }) {
         material: f.material || null,
         description: f.description || null,
         primary_category_id: f.primary_category_id,
-        size: isEarring ? null : f.sizes[0]?.size || null,
-        size_unit: isEarring ? null : (f.sizes[0]?.size_unit || null),
+        size: isStockOnly ? null : f.sizes[0]?.size || null,
+        size_unit: isStockOnly ? null : (f.sizes[0]?.size_unit || null),
         main_image_url: f.main_image_url,
       };
 
@@ -189,7 +189,7 @@ export function ItemForm({ itemId }: { itemId?: string }) {
         stock: number;
         sort_order: number;
       }> = [];
-      if (isEarring) {
+      if (isStockOnly) {
         sizeRows.push({
           item_id: id!,
           size: null,
@@ -491,9 +491,9 @@ export function ItemForm({ itemId }: { itemId?: string }) {
         <CardContent className="space-y-4 pt-6">
           <div className="flex items-center justify-between">
             <Label className="text-base">
-              {isEarring ? t("field.stockOnly") : t("field.sizes")}
+              {isStockOnly ? t("field.stockOnly") : t("field.sizes")}
             </Label>
-            {!isEarring && (
+            {!isStockOnly && (
               <Button type="button" variant="outline" size="sm" onClick={addSize}>
                 <Plus className="mr-1 h-4 w-4" />
                 {t("sizes.add")}
@@ -501,7 +501,7 @@ export function ItemForm({ itemId }: { itemId?: string }) {
             )}
           </div>
 
-          {isEarring ? (
+          {isStockOnly ? (
             <div className="max-w-xs space-y-2">
               <Label>{t("field.stock")}</Label>
               <Input
