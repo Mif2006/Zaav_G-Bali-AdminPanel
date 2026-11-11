@@ -143,14 +143,6 @@ function AdminItemsGrid() {
         </Button>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setSearchOpen(true)}
-        aria-label="Search products"
-        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border bg-background shadow-lg transition hover:scale-105 hover:bg-muted"
-      >
-        <Search className="h-5 w-5" />
-      </button>
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-border pb-3 text-sm">
         <button
