@@ -35,7 +35,20 @@ function AdminItemsGrid() {
   const items = useQuery({ queryKey: ["items"], queryFn: listItems });
   const tags = useQuery({ queryKey: ["item_tags"], queryFn: listItemTags });
 
-  const [activeCat, setActiveCat] = useState<string | null>(null);
+  const [activeCat, setActiveCat] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return window.sessionStorage.getItem("admin-items-active-category");
+  });
+
+  // Keep the selected category when navigating to an item and back.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (activeCat) {
+      window.sessionStorage.setItem("admin-items-active-category", activeCat);
+    } else {
+      window.sessionStorage.removeItem("admin-items-active-category");
+    }
+  }, [activeCat]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
