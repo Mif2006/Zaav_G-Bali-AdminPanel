@@ -69,6 +69,24 @@ function AdminItemsGrid() {
     return m;
   }, [tags.data]);
 
+  // Items carrying the special `hidden` tag are inactive on the public website.
+  const hiddenCategoryIds = useMemo(
+    () =>
+      new Set(
+        (cats.data ?? [])
+          .filter((c) => {
+            const name = (c.name || "").trim().toLowerCase();
+            const slug = (c.slug || "").trim().toLowerCase();
+            return name === "hidden" || slug === "hidden";
+          })
+          .map((c) => c.id),
+      ),
+    [cats.data],
+  );
+
+  const isHiddenItem = (item: Item) =>
+    [...(tagIdsByItem.get(item.id) ?? [])].some((id) => hiddenCategoryIds.has(id));
+
   const matchesCategory = (it: Item, c: Category) =>
     c.kind === "primary"
       ? it.primary_category_id === c.id
@@ -200,7 +218,12 @@ function AdminItemsGrid() {
           <SortableContext items={filteredOrder.map((i) => i.id)} strategy={rectSortingStrategy}>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filteredOrder.map((it) => (
-                <SortableCard key={it.id} item={it} lang={lang} />
+                <SortableCard
+                  key={it.id}
+                  item={it}
+                  lang={lang}
+                  isHidden={isHiddenItem(it)}
+                />
               ))}
             </div>
           </SortableContext>
@@ -293,7 +316,15 @@ function AdminItemsGrid() {
   );
 }
 
-function SortableCard({ item, lang }: { item: Item; lang: Lang }) {
+function SortableCard({
+  item,
+  lang,
+  isHidden,
+}: {
+  item: Item;
+  lang: Lang;
+  isHidden: boolean;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
   });
@@ -307,8 +338,15 @@ function SortableCard({ item, lang }: { item: Item; lang: Lang }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="group relative overflow-hidden rounded-lg border bg-card"
+      className={`group relative overflow-hidden rounded-lg border bg-card ${
+        isHidden ? "border-dashed border-muted-foreground/40 bg-muted/40" : ""
+      }`}
     >
+      {isHidden && (
+        <div className="absolute right-2 top-2 z-10 rounded-md border border-border bg-background/95 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground shadow-sm">
+          Inactive
+        </div>
+      )}
       <button
         type="button"
         {...attributes}
@@ -318,18 +356,26 @@ function SortableCard({ item, lang }: { item: Item; lang: Lang }) {
       >
         <GripVertical className="h-4 w-4" />
       </button>
-      <div className="aspect-square overflow-hidden bg-muted">
+      <div className={`aspect-square overflow-hidden bg-muted ${isHidden ? "bg-muted/70" : ""}`}>
         {item.main_image_url ? (
-          <img src={item.main_image_url} alt="" className="h-full w-full object-cover" />
+          <img
+            src={item.main_image_url}
+            alt=""
+            className={`h-full w-full object-cover ${
+              isHidden ? "grayscale opacity-55" : ""
+            }`}
+          />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
             no image
           </div>
         )}
       </div>
-      <div className="flex items-start justify-between gap-2 p-3">
+      <div className={`flex items-start justify-between gap-2 p-3 ${isHidden ? "text-muted-foreground" : ""}`}>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-medium">{item.title}</div>
+          <div className={`truncate text-sm font-medium ${isHidden ? "text-muted-foreground" : ""}`}>
+            {item.title}
+          </div>
           <div className="text-xs tabular-nums text-muted-foreground">
             {formatPrice(item.price, lang)}
           </div>
@@ -340,6 +386,6 @@ function SortableCard({ item, lang }: { item: Item; lang: Lang }) {
           </Link>
         </Button>
       </div>
-    </div>
+    </div> 
   );
 }
