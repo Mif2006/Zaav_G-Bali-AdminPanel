@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCatalogRouteImport } from './routes/admin.catalog'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminStockRouteImport } from './routes/admin.stock'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
@@ -51,6 +52,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminStockRoute = AdminStockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
   id: '/api/uploadthing',
   path: '/api/uploadthing',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/stock': typeof AdminStockRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/stock': typeof AdminStockRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/stock': typeof AdminStockRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/catalog'
     | '/admin/categories'
+    | '/admin/stock'
     | '/api/uploadthing'
     | '/collections/$slug'
     | '/admin/'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/catalog'
     | '/admin/categories'
+    | '/admin/stock'
     | '/api/uploadthing'
     | '/collections/$slug'
     | '/admin'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/catalog'
     | '/admin/categories'
+    | '/admin/stock'
     | '/api/uploadthing'
     | '/collections/$slug'
     | '/admin/'
@@ -210,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/stock': {
+      id: '/admin/stock'
+      path: '/stock'
+      fullPath: '/admin/stock'
+      preLoaderRoute: typeof AdminStockRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/uploadthing': {
       id: '/api/uploadthing'
       path: '/api/uploadthing'
@@ -251,6 +270,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminCatalogRoute: typeof AdminCatalogRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminStockRoute: typeof AdminStockRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminItemsIdRoute: typeof AdminItemsIdRoute
   AdminItemsNewRoute: typeof AdminItemsNewRoute
@@ -259,6 +279,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCatalogRoute: AdminCatalogRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminStockRoute: AdminStockRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminItemsIdRoute: AdminItemsIdRoute,
   AdminItemsNewRoute: AdminItemsNewRoute,

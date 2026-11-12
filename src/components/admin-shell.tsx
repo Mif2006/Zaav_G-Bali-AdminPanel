@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Package, Tags, Layout, ArrowLeft, Languages, LogOut } from "lucide-react";
+import { Package, Tags, Layout, ArrowLeft, Languages, LogOut, Warehouse } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n, nextLang } from "@/lib/i18n";
@@ -16,6 +16,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const nav = [
     { to: "/admin", label: t("admin.items"), icon: Package, exact: true },
     { to: "/admin/categories", label: t("admin.categories"), icon: Tags },
+    { to: "/admin/stock", label: "Stock", icon: Warehouse },
     { to: "/admin/catalog", label: t("admin.catalogTabs"), icon: Layout },
   ];
 
