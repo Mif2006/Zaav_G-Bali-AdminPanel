@@ -518,7 +518,21 @@ export function ItemForm({ itemId }: { itemId?: string }) {
             </div>
           ) : (
             <div className="space-y-2">
-              {f.sizes.map((s, i) => (
+              {[...f.sizes]
+                .map((s, originalIndex) => ({ ...s, originalIndex }))
+                .sort((a, b) => {
+                  const toComparableSize = (size: string, unit: SizeRow["size_unit"]) => {
+                    const value = Number.parseFloat(size.replace(",", "."));
+                    if (!Number.isFinite(value)) return Number.POSITIVE_INFINITY;
+                    if (unit === "mm") return value / 10;
+                    return value;
+                  };
+
+                  const aValue = toComparableSize(a.size, a.size_unit || defaultUnit);
+                  const bValue = toComparableSize(b.size, b.size_unit || defaultUnit);
+                  return aValue - bValue;
+                })
+                .map(({ originalIndex: i, ...s }) => (
                 <div
                   key={i}
                   className="grid grid-cols-[1fr_140px_140px_auto] items-end gap-3 rounded-md border p-3"
